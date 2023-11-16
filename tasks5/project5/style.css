@@ -1,0 +1,62 @@
+body{
+    font-family: sans-serif;
+}
+
+h1{
+    text-align: center;
+    background-color: red;
+    color: white;
+    font-family: sans-serif;
+    padding: 10px;
+    margin: 0;
+}
+.navElement{
+    display: flex;
+    justify-content: space-evenly;
+    background-color: black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 1em;
+}
+
+.topNav{
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: sans-serif;
+    padding: 1em;
+    padding-left: 3em;
+    padding-right: 3em;
+    border: 2px solid red;
+}
+table{
+    table-layout: auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th{
+    border: 1px solid black;
+    padding: 2px;
+}
+td{
+    border: 1px dashed grey;
+    border-collapse: collapse;
+    padding: 2px;
+}
+.rightNavMenu{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.rightNavs{
+    color: white;
+    text-decoration: none;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 10px;
+    font-size: 2em;
+    width: 80%;
+    background-color: black;
+    text-align: center;
+    border: 5px solid red;
+}
