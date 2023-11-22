@@ -10,8 +10,6 @@ class ErrorHandler{
         ]);
 
         
-
-
     }
 
     public static function handleError(

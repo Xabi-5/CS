@@ -1,21 +1,27 @@
 <?php 
     declare(strict_types= 1);
 
+    //Cada vez que encontre unha clases que non sepa, irá a buscala polo nome no
+    //ficheiro seleccionado e vai a cargala automáticamente
     spl_autoload_register(function ($class) {
         require __DIR__ . "/src/$class.php";
     });
 
-    set_exception_handler("ErrorHandler::handleException");
+    //Maneja as excepcións que se produzan coa DB
+    // set_error_handler("ErrorHandler::handleError");
+    // set_exception_handler("ErrorHandler::handleException");
+
+    //Devolve todas as requests en JSON
     header("Content-type: application/json; charset=UTF-8");
 
     $parts = explode("/", $_SERVER['REQUEST_URI']);
-    if($parts[1] != "products"){
+    if($parts[2] != "cars"){
         http_response_code(404);
         exit;
     }
-    $id = $parts[2] ?? null;
+    $id = $parts[3] ?? null;
 
-    $database = new Database("localhost", "product_db", "appuser", "abc123.");
+    $database = new Database("localhost", "formula1", "f1manager", "abc123.");
 
     $database->getConnection();
     
