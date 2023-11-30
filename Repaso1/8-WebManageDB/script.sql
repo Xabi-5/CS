@@ -41,3 +41,7 @@ values ('Oranges', '1kg Seville oranges', (select id from category where name = 
         ('Pringles Paprika', 'Paprika flavoured pringles chips', (select id from category where name = "Snacks")),
         ('Pringles Sour Cream', 'Sour cream flavoured pringles chips', (select id from category where name = "Snacks"));
 
+insert into user (dni, name, address, login, password, admin)
+    values('00000000A', 'James', 'Raleigh 8', 'jamesRaleigh', 'abc', true),
+    ('11111111B', 'Matthew', 'Tucson 7', 'matTucson', 'efg', false),
+    ('22222222C', 'Alfred', 'Chicago 2', 'alChicago', 'typewriter', false);

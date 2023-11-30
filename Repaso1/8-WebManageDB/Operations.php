@@ -1,8 +1,18 @@
 <?php 
-    include 'Product.php';
-class Operations{
 
-    public function __construct(private PDO $conn){
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
+    include 'Product.php';
+    include 'User.php';
+class Operations{
+    private PDO $conn;
+
+    public function __construct(){
+        $this->openConnection();
+    }
+
+    public function openConnection(){
         try{
             $servername = "localhost";
             $username = "gestor";
@@ -22,26 +32,11 @@ class Operations{
         unset($this->conn);
     }
 
-    function getProduct(int $id){
-        try{
-            $sql = "SELECT *
-                    FROM Product 
-                    WHERE id = ?";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$id]);
-            $product = $stmt->fetchObject('Product');
-            return $product;
-
-        }catch(PDOException $e) {
-            throw $e;
-        }
-
-    }
 
     function getCategory(int $id){
         try{
             $sql = "SELECT *
-                    FROM Category 
+                    FROM category 
                     WHERE id = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$id]);
@@ -55,11 +50,11 @@ class Operations{
     function getAllCategories(){
         try{
             $sql = "SELECT *
-                FROM Category";
+                FROM category";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             $categories = array();
-            while($category = $stmt->fetchObject('Categories')){
+            while($category = $stmt->fetchObject('Category')){
                 $categories[] = $category;
             }
             
@@ -69,9 +64,37 @@ class Operations{
         }
     }
 
+    //Arranxar para que colla a categoria
+    function getProduct(int $id){
+        try{
+
+             $sql = "SELECT *
+                    FROM category 
+                    WHERE id = (
+                        SELECT idCategory
+                        FROM product
+                        WHERE id = ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$id]);
+            $category = $stmt->fetchObject('Category');
+            $sql = "SELECT id, name, description, picture
+                    FROM product 
+                    WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$id]);
+            $product = $stmt->fetchObject('Product');
+            $product->setCategory($category);
+            return $product;
+
+        }catch(PDOException $e) {
+            throw $e;
+        }
+
+    }
+
     function addProduct(Product $product){
         try{
-            $sql = "INSERT INTO Product(name, description, picture, idCategory)
+            $sql = "INSERT INTO product(name, description, picture, idCategory)
                 VALUES (?,?,?,?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$product->getName(), $product->getDescription(),
@@ -89,12 +112,12 @@ class Operations{
     }
     function updateProduct(Product $product){
         try{
-            $sql = "UPDATE Product
+            $sql = "UPDATE product
                     SET name=?, description=?, picture=?, idCategory=?
                     WHERE id = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$product->getName(), $product->getDescription(),
-                            $product->getPicture(), $product->getCategory(),
+                            $product->getPicture(), $product->getCategory()->getId(),
                             $product->getId()]);
             
             return $stmt->rowCount();
@@ -106,7 +129,7 @@ class Operations{
     function getUserName(string $login, string $password){
         try{
             $sql = "SELECT name
-                    FROM User
+                    FROM user
                     WHERE login = ? AND password=?";
 
             $stmt = $this->conn->prepare($sql);
@@ -123,3 +146,16 @@ class Operations{
         }
     }
 }
+
+// echo 'a';
+
+$con = new Operations();
+// $product = $con->getProduct(4);
+// $categories = $con->getAllCategories();
+// foreach($categories as $category){
+//     echo $category->getName();
+// }
+// echo $product->getCategory()->getName();
+// echo $product->getId();
+// echo $product->getDescription();
+echo $con->getUserName('alChicago', 'typewriter');

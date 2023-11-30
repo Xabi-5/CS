@@ -1,8 +1,13 @@
 <?php 
     include 'Category.php';
     class Product{
-        public function __construct(private int $id, private string $name,
-        private string $description, private string $picture, private Category $category){}
+        private int $id;
+        private string $name;
+        private string $description;
+        private ?string $picture;
+        private Category $category;
+        public function __construct(){}
+
 
         /**
          * Get the value of id
@@ -79,6 +84,7 @@
          */ 
         public function setPicture($picture)
         {
+                
                 $this->picture = $picture;
 
                 return $this;
