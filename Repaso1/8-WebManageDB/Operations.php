@@ -126,6 +126,7 @@ class Operations{
         }
     }
 
+    //make it so it returns an array with the admin perhaps?
     function getUserName(string $login, string $password){
         try{
             $sql = "SELECT name
