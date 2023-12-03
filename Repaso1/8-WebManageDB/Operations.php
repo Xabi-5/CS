@@ -129,18 +129,19 @@ class Operations{
     //make it so it returns an array with the admin perhaps?
     function getUserName(string $login, string $password){
         try{
-            $sql = "SELECT name
+            $sql = "SELECT name, admin
                     FROM user
                     WHERE login = ? AND password=?";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$login, $password]);
             
-            $name = $stmt->fetchColumn();
-            if($name == false){
+            $data = $stmt->fetch();
+            
+            if($data == false){
                 return null;
             }else{
-                return $name;
+                return $data;
             }
         }catch(PDOException $e) {
             throw $e;
@@ -150,7 +151,7 @@ class Operations{
 
 // echo 'a';
 
-$con = new Operations();
+// $con = new Operations();
 // $product = $con->getProduct(4);
 // $categories = $con->getAllCategories();
 // foreach($categories as $category){
@@ -159,4 +160,5 @@ $con = new Operations();
 // echo $product->getCategory()->getName();
 // echo $product->getId();
 // echo $product->getDescription();
-echo $con->getUserName('alChicago', 'typewriter');
+// $data = $con->getUserName('asdfds', 'abc');
+// echo $data;

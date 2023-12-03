@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    header{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+    #userDiv{
+    border: 1px solid black;
+    margin-left: 30%;
+    }   
+    nav{
+    display: flex;
+    justify-content: space-around;}
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.php?load=welcome">Welcome</a>
+            <a href="index.php?load=list">List of products</a>
+            <a href="index.php?load=add">Add a new product</a>
+        </nav>
+        <div id="userDiv">
+            user
+        </div>
+    </header>
+</body>
+</html>
