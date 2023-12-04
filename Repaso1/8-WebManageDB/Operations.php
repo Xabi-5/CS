@@ -92,19 +92,39 @@ class Operations{
 
     }
 
+    function getAllProducts(){
+        $sql = "SELECT id, name, description, picture
+                    FROM product";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $products = array();
+            while($product = $stmt->fetchObject('Product')){
+                $id = $product->getId();
+                $sql = "SELECT *
+                    FROM category 
+                    WHERE id = (
+                        SELECT idCategory
+                        FROM product
+                        WHERE id = ?)";
+                $stmt2 = $this->conn->prepare($sql);
+                $stmt2->execute([$id]);
+                $category = $stmt2->fetchObject('Category');
+                $product->setCategory($category);
+                $products[] = $product;
+            }
+            return $products;
+    }
+
     function addProduct(Product $product){
         try{
             $sql = "INSERT INTO product(name, description, picture, idCategory)
                 VALUES (?,?,?,?)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$product->getName(), $product->getDescription(),
-                            $product->getPicture(), $product->getCategory()]);
-            $categories = array();
-            while($category = $stmt->fetchObject('Categories')){
-                $categories[] = $category;
-            }
+                            $product->getPicture(), $product->getCategory()->getId()]);
+           
             
-            return $categories;
+            return $stmt->rowCount();
         }catch(PDOException $e) {
             throw $e;
         }
@@ -162,3 +182,8 @@ class Operations{
 // echo $product->getDescription();
 // $data = $con->getUserName('asdfds', 'abc');
 // echo $data;
+// $products = $con->getAllProducts();
+
+// foreach($products as $product){
+//     echo $product->getCategory()->getId();
+// }

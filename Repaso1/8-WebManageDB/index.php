@@ -16,6 +16,10 @@
     nav{
     display: flex;
     justify-content: space-around;}
+    table, td, th{
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
     </style>
 </head>
 <body>
@@ -38,26 +42,40 @@
 
             if(isset($_COOKIE['admin'])){
                 echo  '<a href="index.php?load=add">Add a new product</a>';
-            }
-            //poñer nome user aqui
-            echo '  </nav>
+                echo '  </nav>
+                <div id="userDiv">
+                    '.$_COOKIE['admin'].'
+                </div>
+            </header>';
+            }elseif (isset($_COOKIE['user'])) {
+                echo '  </nav>
                     <div id="userDiv">
-                        user
+                        '.$_COOKIE['user'].'
                     </div>
                 </header>';
+            }
+            //poñer nome user aqui
             if($_GET["load"] == "welcome"){
 
-                include 'welcome.php';
-                echo 'welcome';
+                include 'Welcome.php';
 
             }elseif($_GET["load"] == "list"){
 
-                include 'listproduct.php';
-                echo 'list';
+                include 'listProduct.php';
 
-            }elseif($_GET["load"] == "add" && isset($_COOKIE['admin'])){
-                include 'addproduct.php';
-                echo 'add';
+            }elseif($_GET["load"] == "add"){
+                if(isset($_COOKIE['admin'])){
+                    include 'addProduct.php';
+                }else{
+                    echo 'You must be an administrator to access this resource';
+                }
+                
+            }elseif($_GET["load"] == "modify"){
+                if(isset($_COOKIE['admin'])){
+                    include 'modifyProduct.php';
+                }else{
+                    echo 'You must be an administrator to access this resource';
+                }
 
             }elseif($_GET["load"] == "logout"){
                 if(isset($_COOKIE['user'])){
@@ -92,11 +110,11 @@
                 $login = $con->getUserName($_POST['username'], $_POST['password']);
                 if($login != null){
                     if($login[1] == 0){
-                        setcookie('user', $_POST['username'], time() + 15);
+                        setcookie('user', $_POST['username'], time() + 120);
                         echo '<h2>Login Successful</h2>';
                         header("Location: index.php?load=welcome");
                     }else if($login[1] == 1) {
-                        setcookie('admin', $_POST['username'], time() + 15);
+                        setcookie('admin', $_POST['username'], time() + 120);
                         echo '<h2>Login Successful</h2>';
                         header("Location: index.php?load=welcome");
                     }
